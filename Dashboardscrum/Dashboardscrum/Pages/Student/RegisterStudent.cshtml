@@ -1,0 +1,25 @@
+﻿@page
+@model Dashboardscrum.Pages.Student.RegisterStudentModel
+@using Dashboardscrum.Repositories;
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dashboardscrum.Models;
+
+@inject UserRepository _userRepository
+@{
+    var loggedIn = _userRepository.IsUserLoggedIn();
+}
+
+@if (loggedIn)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div asp-validation-summary="ModelOnly"></div>
+                <form method="post">
+                    <input type="hidden" asp-for="ApplicationUser!.NFC" value="@Model.NFC"/>
+                    <button type="submit" class="btn btn-primary">Voeg NFC toe</button>
+                </form>
+            </div>
+        </div>
+    </div>
+}

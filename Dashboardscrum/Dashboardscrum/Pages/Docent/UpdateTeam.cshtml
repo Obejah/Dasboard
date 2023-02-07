@@ -1,0 +1,101 @@
+﻿@page
+@model Dashboardscrum.Pages.Docent.UpdateTeamModel
+@using Dashboardscrum.Repositories;
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dashboardscrum.Models;
+
+@inject UserRepository _userRepository
+@{
+    var loggedIn = _userRepository.IsUserLoggedIn();
+}
+
+
+@if (Model.isDocent == true)
+{
+@if(loggedIn)
+{
+    <div class="container">
+        <div class="row">
+            <ul class="list-group">
+            @if (Model._applicationUsers != null)
+            {
+                @foreach (var teamlid in Model._applicationUsers)
+                {
+                        @if(teamlid.TeamId == Model.TeamId.ToString())
+                        {
+                            <form method="post">
+                                <li class="list-group-item">
+                                    <label>@teamlid.UserName</label>
+                                    <input type="hidden" asp-for="ApplicationUser!.TeamId" value="@null" />
+                                    <input type="hidden" asp-for="ApplicationUser!.Id" value="@teamlid.Id" />
+                                    <input type="hidden" asp-for="ApplicationUser!.NormalizedEmail" value="@teamlid.NormalizedEmail" />
+                                    <input type="hidden" asp-for="ApplicationUser!.LockoutEnd" value="@teamlid.LockoutEnd" />
+                                    <input type="hidden" asp-for="ApplicationUser!.LockoutEnabled" value="@teamlid.LockoutEnabled" />
+                                    <input type="hidden" asp-for="ApplicationUser!.Aanwezigheid" value="@teamlid.Aanwezigheid" />
+                                    <input type="hidden" asp-for="ApplicationUser!.AccessFailedCount" value="@teamlid.AccessFailedCount" />
+                                    <input type="hidden" asp-for="ApplicationUser!.ConcurrencyStamp" value="@teamlid.ConcurrencyStamp" />
+                                    <input type="hidden" asp-for="ApplicationUser!.Email" value="@teamlid.Email" />
+                                    <input type="hidden" asp-for="ApplicationUser!.EmailConfirmed" value="@teamlid.EmailConfirmed" />
+                                    <input type="hidden" asp-for="ApplicationUser!.NormalizedUserName" value="@teamlid.NormalizedUserName" />
+                                    <input type="hidden" asp-for="ApplicationUser!.NFC" value="@teamlid.NFC" />
+                                    <input type="hidden" asp-for="ApplicationUser!.PasswordHash" value="@teamlid.PasswordHash" />
+                                    <input type="hidden" asp-for="ApplicationUser!.PhoneNumber" value="@teamlid.PhoneNumber" />
+                                    <input type="hidden" asp-for="ApplicationUser!.PhoneNumberConfirmed" value="@teamlid.PhoneNumberConfirmed" />
+                                    <input type="hidden" asp-for="ApplicationUser!.SecurityStamp" value="@teamlid.SecurityStamp" />
+                                    <input type="hidden" asp-for="ApplicationUser!.Standups" value="@teamlid.Standups" />
+                                    <input type="hidden" asp-for="ApplicationUser!.TwoFactorEnabled" value="@teamlid.TwoFactorEnabled" />
+                                    <input type="hidden" asp-for="ApplicationUser!.UserName" value="@teamlid.UserName" />
+                                    <input type="hidden" asp-for="ApplicationUser!.Role" value="@teamlid.Role" />
+                                    <button type="submit" asp-page-handler="DeleteTeamlid" class="btn btn-danger">Verwijder teamlid</button>
+                                        <input type="hidden" asp-for="Team!.TeamId" value="@Model.TeamId"/>
+                                </li>
+                            </form>
+                        }
+                }   
+            }
+            
+                             
+                            @foreach (var nietlid in Model._applicationUsers)
+                            {
+                                @if(nietlid.TeamId == null)
+                                {
+                                    @if(nietlid.Role <= 1)
+                                    {
+                    <li class="list-group-item">
+            <form method="post">
+                                        <label>@nietlid.UserName</label>
+                                        <input type="hidden" asp-for="ApplicationUser!.TeamId" value="@Model.TeamId"/>
+                                        <input type="hidden" asp-for="ApplicationUser!.Id" value="@nietlid.Id"/>
+                                        <input type="hidden" asp-for="ApplicationUser!.NormalizedEmail" value="@nietlid.NormalizedEmail"/>
+                                        <input type="hidden" asp-for="ApplicationUser!.LockoutEnd" value="@nietlid.LockoutEnd" />
+                                        <input type="hidden" asp-for="ApplicationUser!.LockoutEnabled" value="@nietlid.LockoutEnabled"/>
+                                        <input type="hidden" asp-for="ApplicationUser!.Aanwezigheid" value="@nietlid.Aanwezigheid" />
+                                        <input type="hidden" asp-for="ApplicationUser!.AccessFailedCount" value="@nietlid.AccessFailedCount" />
+                                        <input type="hidden" asp-for="ApplicationUser!.ConcurrencyStamp" value="@nietlid.ConcurrencyStamp" />
+                                        <input type="hidden" asp-for="ApplicationUser!.Email" value="@nietlid.Email" />
+                                        <input type="hidden" asp-for="ApplicationUser!.EmailConfirmed" value="@nietlid.EmailConfirmed" />
+                                        <input type="hidden" asp-for="ApplicationUser!.NormalizedUserName" value="@nietlid.NormalizedUserName" />
+                                        <input type="hidden" asp-for="ApplicationUser!.NFC" value="@nietlid.NFC" />
+                                        <input type="hidden" asp-for="ApplicationUser!.PasswordHash" value="@nietlid.PasswordHash" />
+                                        <input type="hidden" asp-for="ApplicationUser!.PhoneNumber" value="@nietlid.PhoneNumber" />
+                                        <input type="hidden" asp-for="ApplicationUser!.PhoneNumberConfirmed" value="@nietlid.PhoneNumberConfirmed" />
+                                        <input type="hidden" asp-for="ApplicationUser!.SecurityStamp" value="@nietlid.SecurityStamp" />
+                                        <input type="hidden" asp-for="ApplicationUser!.Standups" value="@nietlid.Standups" />
+                                        <input type="hidden" asp-for="ApplicationUser!.TwoFactorEnabled" value="@nietlid.TwoFactorEnabled" />
+                                        <input type="hidden" asp-for="ApplicationUser!.UserName" value="@nietlid.UserName" />
+                                        <button type="submit" asp-page-handler="UpdateTeam" class="btn btn-primary">Voeg teamlid toe</button>
+            </form>
+                        </li>
+                                    }
+                                }
+                            }   
+                
+            </ul>
+            <div class="col row align-items-center">
+                <a href="https://localhost:44362/Docent/TeamsOverzicht" button type="submit" class="btn btn-secondary">Ga terug</a>
+            </div>
+           
+        </div>
+    </div>
+}
+}

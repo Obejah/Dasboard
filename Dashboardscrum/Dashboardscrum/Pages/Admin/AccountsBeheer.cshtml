@@ -1,0 +1,68 @@
+﻿@page
+@model Dashboardscrum.Pages.Admin.AccountsBeheerModel
+@using Dashboardscrum.Repositories;
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dashboardscrum.Models;
+@inject UserRepository _userRepository
+@{
+    var loggedIn = _userRepository.IsUserLoggedIn();
+    bool isAdmin = Model.IsAdmin;
+}
+
+@if(loggedIn)
+{
+    @if (isAdmin)
+    {
+        <div class="container">
+            <div class="row">
+                <ul class="list-group">
+                    @foreach(var User in Model._applicationUsers)
+                    {
+                        @if(User.Role != 3)
+                        {
+                           <form method="post">
+                               <li class="list-group-item">
+                                    <label>@User.UserName</label>
+                               <input type="hidden" asp-for="ApplicationUser!.Id" value="@User.Id"/>
+                                <input type="hidden" asp-for="ApplicationUser!.TeamId" value="@null" />
+                                <input type="hidden" asp-for="ApplicationUser!.Id" value="@User.Id" />
+                                <input type="hidden" asp-for="ApplicationUser!.NormalizedEmail" value="@User.NormalizedEmail" />
+                                <input type="hidden" asp-for="ApplicationUser!.LockoutEnd" value="@User.LockoutEnd" />
+                                <input type="hidden" asp-for="ApplicationUser!.LockoutEnabled" value="@User.LockoutEnabled" />
+                                <input type="hidden" asp-for="ApplicationUser!.Aanwezigheid" value="@User.Aanwezigheid" />
+                                <input type="hidden" asp-for="ApplicationUser!.AccessFailedCount" value="@User.AccessFailedCount" />
+                                <input type="hidden" asp-for="ApplicationUser!.ConcurrencyStamp" value="@User.ConcurrencyStamp" />
+                                <input type="hidden" asp-for="ApplicationUser!.Email" value="@User.Email" />
+                                <input type="hidden" asp-for="ApplicationUser!.EmailConfirmed" value="@User.EmailConfirmed" />
+                                <input type="hidden" asp-for="ApplicationUser!.NormalizedUserName" value="@User.NormalizedUserName" />
+                                <input type="hidden" asp-for="ApplicationUser!.NFC" value="@User.NFC" />
+                                <input type="hidden" asp-for="ApplicationUser!.PasswordHash" value="@User.PasswordHash" />
+                                <input type="hidden" asp-for="ApplicationUser!.PhoneNumber" value="@User.PhoneNumber" />
+                                <input type="hidden" asp-for="ApplicationUser!.PhoneNumberConfirmed" value="@User.PhoneNumberConfirmed" />
+                                <input type="hidden" asp-for="ApplicationUser!.SecurityStamp" value="@User.SecurityStamp" />
+                                <input type="hidden" asp-for="ApplicationUser!.Standups" value="@User.Standups" />
+                                <input type="hidden" asp-for="ApplicationUser!.TwoFactorEnabled" value="@User.TwoFactorEnabled" />
+                                <input type="hidden" asp-for="ApplicationUser!.UserName" value="@User.UserName" />
+                                    @if(User.Role == 1)
+                                    {
+                                        <select name="Role" asp-for="@Model.rol">
+                                            <option value="Student">Student</option>
+                                        <option value="Docent">Docent</option>
+                                        </select>
+                                    }else{
+                                        <select name="Role" asp-for="@Model.rol">
+                                        <option value="Docent">Docent</option>
+                                        <option value="Student">Student</option>
+                                        </select>
+                                    }
+                                    <button type="submit" asp-page-handler="UpdateRole" class="btn btn-primary">Wijzig Rol</button>
+                                    <button type="submit" asp-page-handler="VerwijderUser" class="btn btn-danger">Verwijder optie</button>
+                                </li>
+                           </form>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+}

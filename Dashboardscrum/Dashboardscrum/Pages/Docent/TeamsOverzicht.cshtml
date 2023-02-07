@@ -1,0 +1,54 @@
+﻿@page
+@model Dashboardscrum.Pages.Docent.TeamsOverzichtModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers;
+@using Dashboardscrum.Repositories;
+@inject UserRepository _userRepository
+@{
+    var loggedIn = _userRepository.IsUserLoggedIn();
+}
+
+
+@if (Model.isDocent == true)
+{
+
+    @if (loggedIn)
+    {
+        <figure class="text-center">
+            <blockquote class="blockquote">
+                <h1>Team Overzicht</h1>
+            </blockquote>
+        </figure>
+        <div class="container">
+            <div class="row">
+                @if(Model._Team != null)
+                {
+                    <ul class="list-group">
+                        @foreach(var team in Model._Team)
+                        {
+                            <form method="post">
+                                <input type="hidden" asp-for="Team!.TeamId" value="@team.TeamId"/>
+                                <li class="list-group-item">
+                                    <label>Team</label>
+                                    <input type="text" asp-for="Team!.Name" value="@team.Name"/>
+                                    <input type="hidden" asp-for="Team!.TeamId" value="@team.TeamId"/>
+                                    <button type="submit" asp-page-handler="UpdateTeam" class="btn btn-primary">Wijzig team</button>
+                                    <button type="submit" asp-page-handler="DeleteTeam" class="btn btn-danger">Verwijder team</button>
+                            </form>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <h1>Er zijn geen Teams</h1>
+                }
+                 <div class="col row align-items-center">
+                    <a class="btn btn-primary" href="https://localhost:44362/Docent/VoegTeamToe">Maak Nieuw team aan</a>
+                </div>
+                <div class="col row align-items-center">
+                    <a href="https://localhost:44362/Index" button type="submit" class="btn btn-secondary">Ga terug</a>
+                </div>
+            </div>
+        </div>
+}
+}
+

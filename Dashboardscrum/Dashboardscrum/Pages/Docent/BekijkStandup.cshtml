@@ -1,0 +1,114 @@
+﻿@page
+@model Dashboardscrum.Pages.Docent.BekijkStandupModel
+@using Dashboardscrum.Repositories;
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dashboardscrum.Models;
+@inject UserRepository _userRepository
+@{
+    var loggedIn = _userRepository.IsUserLoggedIn();
+}
+
+
+@if (Model.isDocent == true)
+{
+    @if(loggedIn)
+    {
+        <div class="container">
+                @foreach(var teamlid in Model._applicationUsers)
+                {
+                Model.ooitgedaan = false;
+                    @if(teamlid.TeamId == Model.TeamId.ToString())
+                    {
+                        @foreach (var standup in Model._standups)
+                        {
+                            @if (standup.ApplicationUserId == teamlid.Id)
+                            {
+                                Model.ooitgedaan = true;
+                                @if (standup.Datum == DateTime.Today)
+                                {
+                                    Model.gemaaktvandaag++;
+                                    <div class="row-1">
+                                    <figure class="text-center">
+                                        <blockquote class="blockquote">
+                                               <h1>@teamlid.UserName</h1>
+                                    </figure>
+                                    <div class="row">
+                                        <div class="col">
+                                                <label>Vandaag</label>
+                                                <div class="card card-body">
+                                                    @standup.Vandaag
+                                                </div>
+                                        </div>
+                                        <div class="col">
+                                                <la>Gisteren</la>
+                                                <div class="card card-body">
+                                                    @standup.Gisteren
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+                        }
+                    }
+                }
+                @foreach (var teamlid in Model._applicationUsers)
+                {
+                    Model.ooitgedaan = false;
+                    @if (teamlid.TeamId == Model.TeamId.ToString())
+                    {
+                        @foreach (var standup in Model._standups)
+                        {
+                            @if (standup.ApplicationUserId == teamlid.Id)
+                            {
+                                Model.ooitgedaan = true;
+
+                            }
+                        }
+                                @if (Model.ooitgedaan != true)
+                                {
+                                            <figure class="text-center">
+                                                <blockquote class="blockquote">
+                                                    <label>@teamlid.UserName heeft vandaag nog geen standup ingeleverd</label>
+                                                </blockquote>
+                                            </figure>
+                                }
+                    }
+                }
+         
+                <h2>Vorige standups</h2>
+            
+
+                <div class="container overflow-hidden text-center">
+                                @foreach (var teamlid in Model._applicationUsers)
+                                {
+                                    @if (teamlid.TeamId == Model.TeamId.ToString())
+                                    {
+                    <form method="post" class=" row g-3">
+                        <div class="col-auto">
+
+                                        <label>@teamlid.UserName</label>
+                            </div>
+                                         <div class="col-auto">
+                                            <select asp-for="Standup.StandupId" class="form-control">
+                                                    <option value="@null">-- Select standup datum --</option>
+                                                @foreach (var standup in Model._standups)
+                                                {
+                                                    @if (standup.ApplicationUserId == teamlid.Id)
+                                                    {
+                                                        <option value="@standup.StandupId">@standup.Datum.Day-@standup.Datum.Month-@standup.Datum.Year</option>
+                                                    }
+                                                }
+                                            </select>
+                                             </div>
+                        <div class="col-auto">
+                                            <button type="submit" asp-page-handler="OudeStandup" class="btn btn-primary">Bekijk oude standup</button>
+                            </div>
+                    </form>
+                                    }
+                                }
+                </div>
+        </div>
+    }
+}

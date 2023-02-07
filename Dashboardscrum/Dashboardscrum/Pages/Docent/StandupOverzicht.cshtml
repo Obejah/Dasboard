@@ -1,0 +1,92 @@
+﻿@page
+@model Dashboardscrum.Pages.Docent.StandupOverzichtModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers;
+@using Dashboardscrum.Repositories;
+@inject UserRepository _userRepository
+@{
+    var loggedIn = _userRepository.IsUserLoggedIn();
+}
+
+
+
+@if (Model.isDocent == true)
+{
+
+@if (loggedIn)
+{
+        <figure class="text-center">
+            <blockquote class="blockquote">
+                <h1>Standup Overzicht</h1>
+            </blockquote>
+        </figure>
+    <form>
+        <div class="container text-center">
+            <div class="row">
+                @if (Model._Team != null)
+                {
+                        @foreach (var team in Model._Team)
+                        {
+                        Model.lol = "https://localhost:44362/Docent/BekijkStandup?TeamId=" + team.TeamId;
+                        <input type="hidden" asp-for="Team!.TeamId" value="@team.TeamId" />
+                        Model.teamcount = 0;
+                        Model.vanteamingeleverd = 0;
+                        @foreach (var teamlid in Model._Applicationuser)
+                                {
+                                    @if (teamlid.TeamId == team.TeamId.ToString())
+                                    {
+                                        Model.teamcount++;
+                                        @foreach (var standup in Model._Standup)
+                                        {
+                                            @if (standup.ApplicationUserId == teamlid.Id && standup.Datum == DateTime.Today)
+                                            {
+                                                Model.vanteamingeleverd++;
+                                            }
+
+                                        }
+                                    }
+                                }
+                                @if(Model.teamcount == 0)
+                                {
+                                    <div class="col">
+                                        <button class="btn btn-secondary btn-lg" disabled>@team.Name</button>
+                                    </div>
+                                }
+                                else if (Model.teamcount == Model.vanteamingeleverd)
+                                {
+                                    <div class="col">
+                                        <a href="@Model.lol"button type="submit" class="btn btn-success btn-lg">@team.Name</a>
+                                    </div>
+
+                                }
+                                else if (Model.vanteamingeleverd > 0)
+                                {
+                                    <div class="col">
+                                        <a href="@Model.lol"button type="submit" class="btn btn-warning btn-lg">@team.Name</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col">
+                                        <a href="@Model.lol" button type="submit" class="btn btn-danger btn-lg">@team.Name</a>
+                                    </div>
+                                }
+                        }
+                }
+                else
+                {
+                    <h3>Er zijn geen Teams.</h3>
+                }
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <h2>no</h2>
+}
+}
+<script>
+    setTimeout(function () {
+        location.reload();
+    }, 5000);
+</script>

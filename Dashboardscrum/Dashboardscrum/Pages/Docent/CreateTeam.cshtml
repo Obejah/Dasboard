@@ -1,0 +1,33 @@
+﻿@page
+@model Dashboardscrum.Pages.Docent.CreateTeamModel
+@{
+}
+
+
+
+@if (Model.isDocent == true)
+{
+<h1>Create</h1>
+
+<h4>Team</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Team.Name" class="control-label"></label>
+                <input asp-for="Team.Name" class="form-control" />
+                <span asp-validation-for="Team.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Maak team</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="TeamsOverzicht">Back to List</a>
+</div>
+}

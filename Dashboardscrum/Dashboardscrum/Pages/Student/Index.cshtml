@@ -1,0 +1,35 @@
+﻿@page
+@model Dashboardscrum.Pages.Student.IndexModel
+@using Dashboardscrum.Repositories;
+@inject UserRepository _userRepository
+@{
+    var loggedIn = _userRepository.IsUserLoggedIn();
+}
+@if (loggedIn){
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Student Index</h1>
+                <form method="post">
+                    <button type="submit" asp-page-handler="Standup" class="btn btn-primary">Standup</button>
+                    @if(Model.Team != null)
+                    {
+                        @if (Model.Team.Hulp == 0)
+                        {
+                            <button type="submit" asp-page-handler="Hulp" class="btn btn-primary">Vraag om hulp</button>
+                        }else if (Model.Team.Hulp == 1)
+                        {
+                            <button type="submit" asp-page-handler="Hulp" class="btn btn-danger">Vraag om hulp</button>
+                        }
+                    }
+                    else
+                    {
+                            <button type="submit" asp-page-handler="Hulp" class="btn btn-primary disabled">Vraag om hulp</button>
+                    }
+                </form>
+
+            </div>
+        </div>
+     </div>
+}
+

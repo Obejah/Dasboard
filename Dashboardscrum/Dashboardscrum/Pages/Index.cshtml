@@ -1,0 +1,90 @@
+﻿@page
+@model Dashboardscrum.Pages.DashboardModel
+@using Dashboardscrum.Repositories;
+@using Microsoft.AspNetCore.Mvc.TagHelpers;
+@inject UserRepository _userRepository
+@{
+    var loggedIn = _userRepository.IsUserLoggedIn();
+}
+
+<figure class="text-center">
+    <blockquote class="blockquote">
+        <h1>Dashboard</h1>
+    </blockquote>
+</figure>
+    <div class="container text-center">
+        <div class="row">
+            @if (Model._teams != null)
+            {
+                    @foreach (var team in Model._teams)
+                    {
+                        Model.teamcount = 0;
+                        @foreach (var teamlid in Model._applicationUsers)
+                        {
+                            @if (teamlid.TeamId == team.TeamId.ToString() && teamlid.Aanwezigheid == 1)
+                            {
+                                Model.teamcount++;
+                                Model.teamaanwezigcount++;
+                            }
+                            else if (teamlid.TeamId == team.TeamId.ToString() && teamlid.Aanwezigheid == 0)
+                            {
+                                Model.teamcount++;
+                            }
+                        }
+                        @if(Model.teamcount == 0)
+                        {
+                            <div class="col">
+                                <button class="btn btn-secondary btn-lg" disabled>@team.Name</button>
+                            </div>
+                        }
+                        else if (Model.teamcount == Model.teamaanwezigcount && team.Hulp == 1)
+                        {
+                            <div class="col">
+                                <button class="btn btn-success btn-lg" disabled>@team.Name</button> <label>❓</label>
+                            </div>
+                        }
+                        else if (Model.teamaanwezigcount > 0 && team.Hulp == 1)
+                        {
+                            <div class="col">
+                            <button class="btn btn-warning btn-lg" disabled>@team.Name</button> <label>❓</label>
+                            </div>
+                        }
+                        else if (Model.teamaanwezigcount == 0 && team.Hulp == 1)
+                        {
+                            <div class="col">
+                            <button class="btn btn-danger btn-lg" disabled>@team.Name</button> <label>❓</label>
+                            </div>
+                        }
+                        else if (Model.teamcount == Model.teamaanwezigcount)
+                        {
+                            <div class="col">
+                                <button class="btn btn-success btn-lg" disabled>@team.Name</button> 
+                            </div>
+                        }
+                        else if (Model.teamaanwezigcount > 0)
+                        {
+                            <div class="col">
+                                <button class="btn btn-warning btn-lg" disabled>@team.Name</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col">
+                                <button class="btn btn-danger btn-lg" disabled>@team.Name</button>
+                            </div>
+                        }
+
+                    }
+            }
+            else
+            {
+                <h1>Er zijn geen teams</h1>
+            }
+        </div>
+    </div>
+
+<script>
+    setTimeout(function () {
+        location.reload();
+    }, 5000);
+</script>

@@ -1,0 +1,31 @@
+﻿@page
+@model Dashboardscrum.Pages.Student.StudentStandupModel
+@{
+}
+
+<figure class="text-center">
+    <blockquote class="blockquote">
+        <h1>Standup</h1>
+    </blockquote>
+</figure>
+<div class="Container">
+    <div class="row">
+        <div class="col-md">
+            <form method="post"  asp-page-handler="StudentStandup">
+                <input type="hidden" asp-for="_Standup!.Datum" value="@DateTime.UtcNow.Date" />
+                <div class="form-group">
+                    <h1>Vul in wat je gisteren hebt gedaan</h1>
+                    <input asp-for="_Standup!.Gisteren" type="text" class="form-control" placeholder="Vul in wat je gisteren hebt gedaan">
+                </div>
+                <input type="hidden" />
+                <div class="form-group">
+                    <h1>Vul in wat je vandaag gaat doen</h1>
+                    <input asp-for="_Standup!.Vandaag" type="text" class="form-control" placeholder="Vul in wat je vandaag hebt gedaan">    
+                </div>
+                 <div class="form-group">
+                     <button type="submit" class="btn btn-primary">Upload Standup</button>
+                 </div>
+            </form>
+        </div>
+    </div>
+</div>

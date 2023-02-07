@@ -1,0 +1,83 @@
+﻿@page
+@model Dashboardscrum.Pages.Docent.BekijkOudeStandupModel
+@using Dashboardscrum.Repositories;
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dashboardscrum.Models;
+@inject UserRepository _userRepository
+@{
+    var loggedIn = _userRepository.IsUserLoggedIn();
+}
+
+@if (Model.isDocent == true)
+{
+    
+@if(loggedIn){
+
+    <div class="container overflow-hidden text-center">
+            @foreach(var standup in Model._standups)
+            {
+                @if (standup.StandupId == Model.TeamId)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <h1>Vandaag</h1>
+                            <div class="card card-body">
+                                @standup.Vandaag
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h1>Gisteren</h1>
+                            <div class="card card-body">
+                                @standup.Gisteren
+                            </div>
+                        </div>
+                    </div>
+                }
+         
+            }
+
+    </div>
+        <figure class="text-center">
+            <blockquote class="blockquote">
+            </blockquote>
+        </figure>
+        <form method="post" class=" row g-3">
+            <div class="col-auto">
+                @foreach(var standup in Model._standups)
+                {
+                    @if (standup.StandupId == Model.TeamId)
+                    {
+                        @foreach(var User in Model._applicationUsers)
+                        {
+                            @if(standup.ApplicationUserId == User.Id)
+                            {
+                                Model.userId = User.Id;
+                                <label>@User.UserName</label>
+                                Model.Link = "https://localhost:44362/Docent/BekijkStandup?TeamId=" + User.TeamId;
+                            }
+                        }
+                    }
+                }
+            </div>
+            <div class="col-auto">
+                <select asp-for="Standup.StandupId" class="form-control">
+                    <option value="@Model.TeamId">-- Select standup datum --</option>
+                    @foreach (var standup in Model._standups)
+                    {
+                        @if (standup.ApplicationUserId == Model.userId)
+                        {
+                            <option value="@standup.StandupId">@standup.Datum.Day @standup.Datum.Month  @standup.Datum.Year</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" asp-page-handler="OudeStandup" class="btn btn-primary">Bekijk oude standup</button>
+            </div>
+            <div class="row">
+                <a href="@Model.Link" submit" class="btn btn-secondary">Ga terug</a>
+            </div>
+
+        </form>
+}
+}
